@@ -149,9 +149,10 @@ class Comanda extends Component
         }
 
         // Imprimir en cada impresora según el área
+        $fechaComanda = now()->format('d/m/Y H:i');
         $printService = new ComandaPrintService();
         foreach ($porLugar as $lugar => $lineas) {
-            $printService->imprimir($lineas, $this->mesa->numero, auth()->user()->nombre, $lugar);
+            $printService->imprimir($lineas, $this->mesa->numero, auth()->user()->nombre, $lugar, $fechaComanda);
         }
 
         // Guardar items para el ticket en pantalla antes de limpiar el carrito
@@ -196,9 +197,13 @@ class Comanda extends Component
             ];
         }
 
+        $fechaComanda = $lineas->first()->created_at
+            ? \Carbon\Carbon::parse($lineas->first()->created_at)->format('d/m/Y H:i')
+            : now()->format('d/m/Y H:i');
+
         $printService = new ComandaPrintService();
         foreach ($porLugar as $lugar => $items) {
-            $printService->imprimir($items, $this->mesa->numero, auth()->user()->nombre, $lugar);
+            $printService->imprimir($items, $this->mesa->numero, auth()->user()->nombre, $lugar, $fechaComanda);
         }
 
         $this->notificacion = 'Comanda reimpresa.';

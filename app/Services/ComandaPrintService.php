@@ -11,12 +11,13 @@ class ComandaPrintService
     /**
      * Imprime un grupo de ítems en la impresora correspondiente.
      *
-     * @param  array        $items   [['nombre'=>'', 'cantidad'=>1, 'cambios'=>'']]
+     * @param  array        $items       [['nombre'=>'', 'cantidad'=>1, 'cambios'=>'']]
      * @param  int|string   $mesa
      * @param  string       $mesero
-     * @param  string       $lugar   'BARRA' | 'COCINA'
+     * @param  string       $lugar       'BARRA' | 'COCINA'
+     * @param  string|null  $creadoEn   Fecha/hora de creación de la comanda
      */
-    public function imprimir(array $items, $mesa, string $mesero, string $lugar): void
+    public function imprimir(array $items, $mesa, string $mesero, string $lugar, ?string $creadoEn = null): void
     {
         try {
             $connector = $this->resolverConector($lugar);
@@ -24,6 +25,9 @@ class ComandaPrintService
             \Log::warning("ComandaPrintService: no se pudo conectar a impresora ($lugar): " . $e->getMessage());
             return;
         }
+
+        $fechaComanda  = $creadoEn ?? now()->format('d/m/Y H:i');
+        $fechaImpresion = now()->format('d/m/Y H:i');
 
         try {
             $printer = new Printer($connector);
@@ -37,7 +41,7 @@ class ComandaPrintService
             $printer->setEmphasis(false);
             $printer->text("Mesa: $mesa\n");
             $printer->text("Mesero: $mesero\n");
-            $printer->text(now()->format('d/m/Y H:i') . "\n");
+            $printer->text("Comanda: $fechaComanda\n");
 
             $printer->setJustification(Printer::JUSTIFY_LEFT);
             $printer->text(str_repeat('-', 40) . "\n");
@@ -52,6 +56,8 @@ class ComandaPrintService
             }
 
             $printer->text(str_repeat('-', 40) . "\n");
+            $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $printer->text("Impreso: $fechaImpresion\n");
             $printer->feed(4);
             $printer->cut();
             $printer->close();
