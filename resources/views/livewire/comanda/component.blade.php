@@ -50,10 +50,19 @@
             <!-- Comanda ya enviada -->
             @if($comandaAbierta->isNotEmpty())
             <div class="bg-white rounded-xl shadow p-4">
-                <h3 class="font-bold text-gray-700 mb-3 flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-orange-400 inline-block"></span>
-                    Enviado a cocina
-                </h3>
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-bold text-gray-700 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-orange-400 inline-block"></span>
+                        Enviado a cocina
+                    </h3>
+                    <button wire:click="reimprimir"
+                            wire:loading.attr="disabled"
+                            wire:target="reimprimir"
+                            class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 font-medium px-3 py-1 rounded-lg flex items-center gap-1">
+                        <span wire:loading.remove wire:target="reimprimir">🖨 Reimprimir</span>
+                        <span wire:loading wire:target="reimprimir">Imprimiendo...</span>
+                    </button>
+                </div>
                 <div class="space-y-1">
                     @foreach($comandaAbierta as $linea)
                         <div wire:key="comanda-{{ $linea->id }}"

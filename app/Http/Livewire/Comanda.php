@@ -174,6 +174,36 @@ class Comanda extends Component
         $this->ticketItems   = [];
     }
 
+    public function reimprimir()
+    {
+        $lineas = ComandaModel::with('producto.category')
+            ->where('mesa_id', $this->mesa->id)
+            ->where('estatus', 'Pendiente')
+            ->get();
+
+        if ($lineas->isEmpty()) {
+            $this->notificacion = 'No hay productos enviados para reimprimir.';
+            return;
+        }
+
+        $porLugar = [];
+        foreach ($lineas as $linea) {
+            $lugar = strtoupper($linea->producto->category->lugar ?? 'BARRA');
+            $porLugar[$lugar][] = [
+                'nombre'   => $linea->orden,
+                'cantidad' => $linea->cantidad,
+                'cambios'  => $linea->cambios ?? '',
+            ];
+        }
+
+        $printService = new ComandaPrintService();
+        foreach ($porLugar as $lugar => $items) {
+            $printService->imprimir($items, $this->mesa->numero, auth()->user()->nombre, $lugar);
+        }
+
+        $this->notificacion = 'Comanda reimpresa.';
+    }
+
     // Requerido por CartTrait
     public function noty(string $msg)
     {

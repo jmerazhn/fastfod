@@ -1,4 +1,4 @@
-<div>
+<div wire:poll.10s>
     <h2 class="text-xl font-bold text-gray-700 mb-4">Selecciona una Mesa</h2>
 
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
