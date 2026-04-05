@@ -68,10 +68,11 @@ class ComandaPrintService
             $port = (int) config('resol.printer_cocina_port', 9100);
 
             if (empty($ip)) {
-                throw new \RuntimeException('PRINTER_COCINA_IP no configurado en .env');
+                \Log::info('ComandaPrintService: COCINA sin IP, redirigiendo a impresora BARRA.');
+                $lugar = 'BARRA';
+            } else {
+                return new NetworkPrintConnector($ip, $port);
             }
-
-            return new NetworkPrintConnector($ip, $port);
         }
 
         // BARRA — impresora local Windows
