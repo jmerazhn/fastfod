@@ -11,129 +11,36 @@ class Product extends Model
     use HasFactory;
     use CartTrait;
 
+    protected $table = 'productos';
 
-    protected $fillable = ['code', 'name', 'price', 'price2', 'changes', 'cost', 'stock', 'minstock', 'category_id'];
+    protected $fillable = ['nombre', 'precio', 'costo', 'categoria_id', 'icono', 'inventario', 'stock'];
 
-    protected $hidden = ['updated_at', 'created_at'];
+    public $timestamps = false;
 
-
-
-
-    public static function rules($id)
-    {
-        if ($id <= 0) {
-            return [
-                'name'          => 'required|min:3|max:100|string|unique:products',
-                'code'          => 'nullable|max:25',
-                'category'      => 'required|not_in:elegir',
-                'price'         => 'gt:0',
-                'cost'          => 'gt:0',
-                'stock'         => 'required',
-                'minstock'      => 'required'
-            ];
-        } else {
-            return [
-                'name'      => "required|min:3|max:100|string|unique:products,name,{$id}",
-                'code'      => 'nullable|max:25',
-                'category'  => 'required|not_in:elegir',
-                'price'     => 'gt:0',
-                'cost'      => 'gt:0',
-                'stock'     => 'required',
-                'minstock'  => 'required'
-            ];
-        }
-    }
-
-    public static $messages = [
-        'name.required'     => 'Nombre del producto requerido',
-        'name.min'          => 'El nombre debe tener al menos 3 caracteres',
-        'name.max'          => 'El nombre debe tener máximo 100 caracteres',
-        'name.unique'       => 'El nombre ya existe',
-        'code.max'          => 'El código debe tener máximo 25 caracteres',
-        'category.required' => 'La categoría es requerida',
-        'category.not_in'   => 'Elige una categoría válida',
-        'cost.gt'           => 'El costo debe ser mayor a cero',
-        'price.gt'          => 'El precio de venta debe ser mayor a cero',
-        'stock.required' => 'Ingresa el stock',
-        'minstock.required' => 'Ingresa el stock mínimo'
-    ];
+    // Para que toArray() incluya los acesores que usa Cart::validate()
+    protected $appends = ['name', 'price', 'livestock'];
 
     // relationships
     public function category()
     {
-        return $this->belongsTo(Category::class);
-    }    
-
-    public function sales()
-    {
-        return $this->hasMany(OrderDetail::class);
+        return $this->belongsTo(Category::class, 'categoria_id');
     }
 
-    public function images()
+    // Accesores para compatibilidad con CartTrait y vistas
+    public function getNameAttribute()
     {
-        return $this->morphMany(Image::class, 'model');
+        return $this->nombre;
     }
 
-    //Get the product's most recent image.
-    public function latestImage()
+    public function getPriceAttribute()
     {
-        return $this->morphOne(Image::class, 'model')->latestOfMany();
-    }
-
-
-    //accessors
-    public function getImgAttribute()
-    {
-        if (count($this->images)) {
-            if (file_exists('storage/products/' . $this->images->last()->file))
-                return  "storage/products/" . $this->images->last()->file;
-            else
-                return 'storage/image_not_found.png';
-        } else {
-            return 'storage/no_image_available.jpg';
-        }
-    }
-
-
-
-    public function getDiscountAttribute()
-    {
-        return (($this->price2 * 100) / $this->price) - 100;
-    }
-
-    public function geHalfAttribute()
-    {
-        return (($this->price2 * 2) == $this->price);
+        return $this->precio;
     }
 
     public function getLiveStockAttribute()
     {
-        $stock = 0;
+        if (!$this->inventario) return 999;
         $stockCart = $this->countInCart($this->id);
-        if($stockCart > 0)  {
-            $stock = $this->stock - $stockCart;
-        } else {
-            $stock = $this->stock;
-        }
-        return $stock;
+        return $this->stock - $stockCart;
     }
-
-
-    //appends
-    /*
-    protected $appends = ['has_stock'];
-    public function getHasStockAttribute()
-    {
-        $stock = 0;
-        $stockCart = $this->countInCart($this->id);
-           if($stockCart > 0)  {
-            $stock = $this->stock - $stockCart;
-        } else {
-            $stock = $this->stock;
-        }
-        return $stock > 0 ? true : false;
-    }
-    */
-
-
 }

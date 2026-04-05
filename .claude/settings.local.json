@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php -r \"echo md5\\('test'\\);\")",
+      "Bash(php artisan:*)",
+      "Read(//usr/bin/**)",
+      "Read(//mnt/c/laragon/bin/php/**)",
+      "Bash(ls /mnt/c/laragon/bin/php/php-8.1.10-Win32-vs16-x64/*.exe)",
+      "Bash(grep:*)",
+      "Bash(node:*)",
+      "Bash(npx tailwindcss:*)",
+      "Bash(ls:*)"
+    ]
+  }
+}

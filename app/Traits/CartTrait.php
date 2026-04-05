@@ -17,7 +17,7 @@ trait CartTrait
     public function getTotalCart()
     {
         $cart = new Cart;
-        return $cart->totalAmount(false);
+        return $cart->totalAmount();
     }
 
     public function countInCart($id)
