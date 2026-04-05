@@ -11,13 +11,14 @@ class ComandaPrintService
     /**
      * Imprime un grupo de ítems en la impresora correspondiente.
      *
-     * @param  array        $items       [['nombre'=>'', 'cantidad'=>1, 'cambios'=>'']]
+     * @param  array        $items          [['nombre'=>'', 'cantidad'=>1, 'cambios'=>'']]
      * @param  int|string   $mesa
      * @param  string       $mesero
-     * @param  string       $lugar       'BARRA' | 'COCINA'
-     * @param  string|null  $creadoEn   Fecha/hora de creación de la comanda
+     * @param  string       $lugar          'BARRA' | 'COCINA'
+     * @param  string|null  $creadoEn      Fecha/hora de creación de la comanda
+     * @param  int|null     $comandaId     ID de la primera comanda del batch
      */
-    public function imprimir(array $items, $mesa, string $mesero, string $lugar, ?string $creadoEn = null): void
+    public function imprimir(array $items, $mesa, string $mesero, string $lugar, ?string $creadoEn = null, ?int $comandaId = null): void
     {
         try {
             $connector = $this->resolverConector($lugar);
@@ -39,9 +40,12 @@ class ComandaPrintService
             $printer->text(strtoupper($lugar) . "\n");
             $printer->setTextSize(1, 1);
             $printer->setEmphasis(false);
+            if ($comandaId) {
+                $printer->text("# Comanda: $comandaId\n");
+            }
             $printer->text("Mesa: $mesa\n");
             $printer->text("Mesero: $mesero\n");
-            $printer->text("Comanda: $fechaComanda\n");
+            $printer->text("Fecha: $fechaComanda\n");
 
             $printer->setJustification(Printer::JUSTIFY_LEFT);
             $printer->text(str_repeat('-', 40) . "\n");

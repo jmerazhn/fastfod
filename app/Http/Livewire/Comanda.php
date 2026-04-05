@@ -124,10 +124,11 @@ class Comanda extends Component
         $productos  = Product::with('category')->whereIn('id', $productIds)->get()->keyBy('id');
 
         // Guardar en BD y agrupar por lugar para impresión
-        $porLugar = [];
+        $porLugar    = [];
+        $primerIdComanda = null;
 
         foreach ($items as $item) {
-            ComandaModel::create([
+            $comanda = ComandaModel::create([
                 'mesa_id'     => $this->mesa->id,
                 'mesero_id'   => $meseroId,
                 'producto_id' => $item->id,
@@ -139,6 +140,8 @@ class Comanda extends Component
                 'impresa'     => 0,
                 'estatus'     => 'Pendiente',
             ]);
+
+            $primerIdComanda = $primerIdComanda ?? $comanda->id;
 
             $lugar = strtoupper($productos[$item->id]->category->lugar ?? 'BARRA');
             $porLugar[$lugar][] = [
@@ -152,7 +155,7 @@ class Comanda extends Component
         $fechaComanda = now()->format('d/m/Y H:i');
         $printService = new ComandaPrintService();
         foreach ($porLugar as $lugar => $lineas) {
-            $printService->imprimir($lineas, $this->mesa->numero, auth()->user()->nombre, $lugar, $fechaComanda);
+            $printService->imprimir($lineas, $this->mesa->numero, auth()->user()->nombre, $lugar, $fechaComanda, $primerIdComanda);
         }
 
         // Guardar items para el ticket en pantalla antes de limpiar el carrito
@@ -203,7 +206,7 @@ class Comanda extends Component
 
         $printService = new ComandaPrintService();
         foreach ($porLugar as $lugar => $items) {
-            $printService->imprimir($items, $this->mesa->numero, auth()->user()->nombre, $lugar, $fechaComanda);
+            $printService->imprimir($items, $this->mesa->numero, auth()->user()->nombre, $lugar, $fechaComanda, $lineas->first()->id);
         }
 
         $this->notificacion = 'Comanda reimpresa.';
