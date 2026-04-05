@@ -4,6 +4,7 @@ use App\Http\Livewire\Mesas;
 use App\Http\Livewire\Comanda;
 use App\Http\Livewire\Menu;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\BienvenidaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -12,6 +13,19 @@ Route::get('/', function () {
 
 // Menú público — sin autenticación
 Route::get('/menu', Menu::class)->name('menu');
+
+// Portal cautivo
+Route::get('/bienvenida', [BienvenidaController::class, 'show'])->name('bienvenida');
+Route::post('/bienvenida/autorizar', [BienvenidaController::class, 'autorizar'])->name('bienvenida.autorizar');
+
+// Cartelito imprimible
+Route::get('/cartelito', function () {
+    return view('cartelito', [
+        'ssid'      => config('unifi.wifi_ssid'),
+        'password'  => config('unifi.wifi_password'),
+        'url_menu'  => url('/bienvenida'),
+    ]);
+})->name('cartelito');
 
 // Imágenes de RESOL
 Route::get('/resol-img/{filename}', function (string $filename) {
