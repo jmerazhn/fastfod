@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Usuario;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,29 +27,37 @@ class AuthenticatedSessionController extends Controller
             'password.required' => 'La contraseña es requerida',
         ]);
 
-        $user = User::where('correo', $request->correo)
-                    ->orWhere('nombre', $request->correo)
-                    ->first();
+        $mesero = User::where('correo', $request->correo)
+                      ->orWhere('nombre', $request->correo)
+                      ->first();
 
-        if (!$user || $user->clave !== md5($request->password)) {
-            throw ValidationException::withMessages([
-                'correo' => 'Las credenciales no son correctas.',
-            ]);
+        if ($mesero && $mesero->clave === md5($request->password)) {
+            Auth::guard('web')->login($mesero, $request->boolean('remember'));
+            $request->session()->regenerate();
+            return redirect()->intended('/mesas');
         }
 
-        Auth::login($user, $request->boolean('remember'));
+        $usuario = Usuario::where('correo', $request->correo)
+                          ->orWhere('nombre', $request->correo)
+                          ->first();
 
-        $request->session()->regenerate();
+        if ($usuario && $usuario->clave === md5($request->password)) {
+            Auth::guard('admin')->login($usuario, $request->boolean('remember'));
+            $request->session()->regenerate();
+            return redirect()->intended('/admin');
+        }
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        throw ValidationException::withMessages([
+            'correo' => 'Las credenciales no son correctas.',
+        ]);
     }
 
     public function destroy(Request $request)
     {
         Auth::guard('web')->logout();
+        Auth::guard('admin')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/');
