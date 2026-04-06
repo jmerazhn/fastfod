@@ -185,6 +185,25 @@ routes/web.php                     ← rutas de la app
 
 ---
 
+## Instalación inicial
+
+Antes de levantar el servidor por primera vez, instalar las dependencias de PHP:
+
+```bash
+composer install
+```
+
+> Si `composer` no está instalado, descargarlo desde https://getcomposer.org/download/
+> Laragon incluye Composer — verificar que esté en el PATH.
+
+Luego levantar el servidor:
+
+```bash
+php artisan serve --host=0.0.0.0 --port=8000
+```
+
+---
+
 ## Notas importantes
 
 - **No correr `php artisan migrate`** en la BD de RESOL — las tablas ya existen

@@ -70,10 +70,12 @@ extension=openssl
 extension=pdo_mysql
 extension=sockets
 extension=fileinfo
+extension=intl
 ```
 
 > `sockets` es requerida por la impresora de cocina (red).
 > `pdo_mysql` es requerida para conectarse a la BD de RESOL.
+> `intl` es requerida por `mike42/escpos-php` (impresora térmica).
 
 ---
 
@@ -83,7 +85,7 @@ extension=fileinfo
 php -m
 ```
 
-Deben aparecer en la lista: `mbstring`, `openssl`, `PDO`, `pdo_mysql`, `sockets`, `fileinfo`.
+Deben aparecer en la lista: `mbstring`, `openssl`, `PDO`, `pdo_mysql`, `sockets`, `fileinfo`, `intl`.
 
 ---
 

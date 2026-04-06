@@ -60,8 +60,12 @@ cd fastfod
 ## 4. Instalar dependencias PHP
 
 ```bash
-composer install --no-dev --optimize-autoloader
+composer install --no-dev --optimize-autoloader --ignore-platform-req=ext-intl
 ```
+
+> El flag `--ignore-platform-req=ext-intl` es necesario porque `mike42/escpos-php`
+> requiere la extensión `intl`, que no siempre viene habilitada por defecto.
+> Si `intl` ya está activa en `php.ini`, el flag es opcional.
 
 ---
 
