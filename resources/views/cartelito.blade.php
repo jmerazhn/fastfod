@@ -182,7 +182,7 @@
             </div>
 
             <div class="qr-wrapper">
-                <canvas id="qrcode"></canvas>
+                <div id="qrcode"></div>
             </div>
 
             <p class="instruccion">
@@ -205,13 +205,16 @@
 
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="{{ asset('js/qrcode.min.js') }}"></script>
     <script>
-        QRCode.toCanvas(
-            document.getElementById('qrcode'),
-            '{{ $url_menu }}',
-            { width: 180, margin: 1, color: { dark: '#1a0a00', light: '#ffffff' } }
-        );
+        new QRCode(document.getElementById('qrcode'), {
+            text: '{{ $url_menu }}',
+            width: 180,
+            height: 180,
+            colorDark: '#1a0a00',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+        });
     </script>
 </body>
 </html>
