@@ -11,7 +11,22 @@
       "Bash(npx tailwindcss:*)",
       "Bash(ls:*)",
       "Bash(curl -s -o /mnt/c/laragon/www/fastfod/public/js/qrcode.min.js \"https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js\")",
-      "Bash(curl -s -o /mnt/c/laragon/www/fastfod/public/js/qrcode.min.js \"https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js\")"
+      "Bash(curl -s -o /mnt/c/laragon/www/fastfod/public/js/qrcode.min.js \"https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js\")",
+      "Bash(composer require:*)",
+      "Bash(/mnt/c/laragon/bin/php/php-8.1.10-Win32-vs16-x64/php.exe /mnt/c/ProgramData/ComposerSetup/bin/composer require barryvdh/laravel-dompdf:^1.0)",
+      "Read(//mnt/c/ProgramData/ComposerSetup/bin/**)",
+      "Read(//mnt/c/laragon/bin/**)",
+      "Bash(/mnt/c/laragon/bin/php/php-8.1.10-Win32-vs16-x64/php.exe /mnt/c/ProgramData/ComposerSetup/bin/composer.phar require barryvdh/laravel-dompdf:^1.0)",
+      "Bash(/mnt/c/laragon/bin/php/php-8.1.10-Win32-vs16-x64/php.exe:*)",
+      "Bash(cmd.exe:*)",
+      "Bash(powershell.exe -Command \"cd 'C:\\\\laragon\\\\www\\\\fastfod'; C:\\\\laragon\\\\bin\\\\php\\\\php-8.1.10-Win32-vs16-x64\\\\php.exe C:\\\\laragon\\\\bin\\\\composer\\\\composer.phar require 'barryvdh/laravel-dompdf:^1.0' 2>&1\")",
+      "Bash(powershell.exe -Command \"Get-Process -Name php | Stop-Process -Force\")",
+      "Bash(powershell.exe -Command \"cd 'C:\\\\laragon\\\\www\\\\fastfod'; C:\\\\laragon\\\\bin\\\\php\\\\php-8.1.10-Win32-vs16-x64\\\\php.exe C:\\\\laragon\\\\bin\\\\composer\\\\composer.phar require 'barryvdh/laravel-dompdf:^1.0' --no-dev 2>&1\")",
+      "Bash(powershell.exe:*)",
+      "Read(//mnt/c/laragon/etc/nginx/sites-enabled/**)",
+      "Read(//mnt/c/laragon/etc/apache2/sites-enabled/**)",
+      "Bash(/mnt/c/laragon/bin/php/php8.0.1/php artisan:*)",
+      "Bash(/mnt/c/laragon/bin/php/php-8.2.28-Win32-vs16-x64/php.exe artisan:*)"
     ]
   }
 }

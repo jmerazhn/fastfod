@@ -27,15 +27,18 @@ class Comanda extends Component
         $this->mesa = $mesa;
     }
 
-    public function render()
+    public function hydrate()
     {
-        // Sincroniza notas con lo que ya está en el carrito
+        // Sincroniza notas con lo que ya está en el carrito (hook correcto, fuera de render)
         foreach ($this->getContentCart() as $item) {
             if (!isset($this->notas[$item->id]) && !empty($item->changes)) {
                 $this->notas[$item->id] = $item->changes;
             }
         }
+    }
 
+    public function render()
+    {
         $productsList = $this->categoriaActiva
             ? Product::where('categoria_id', $this->categoriaActiva)->get()
             : collect();

@@ -2,9 +2,11 @@
 
 use App\Http\Livewire\Mesas;
 use App\Http\Livewire\Comanda;
+use App\Http\Livewire\CotizacionAdmin;
 use App\Http\Livewire\Menu;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\BienvenidaController;
+use App\Http\Controllers\CotizacionPdfController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -58,4 +60,7 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::get('/admin', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
+
+    Route::get('/admin/cotizacion', CotizacionAdmin::class)->name('admin.cotizacion');
+    Route::get('/admin/cotizacion/pdf', [CotizacionPdfController::class, 'descargar'])->name('admin.cotizacion.pdf');
 });

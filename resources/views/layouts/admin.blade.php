@@ -2,19 +2,29 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>RESOL — Comandas</title>
+    <title>@yield('title', 'Administración') — RESOL</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     @livewireStyles
 </head>
 <body class="bg-gray-100 min-h-screen">
 
-    <!-- Navbar -->
-    <nav class="bg-blue-700 text-white px-4 py-3 flex items-center justify-between shadow">
-        <a href="{{ route('mesas') }}" class="font-bold text-lg tracking-wide">RESOL Comandas</a>
+    <nav class="bg-blue-700 text-white px-4 py-3 flex items-center justify-between shadow"
+         wire:ignore>
         <div class="flex items-center gap-4">
-            <span class="text-sm opacity-80">{{ auth()->user()->nombre }}</span>
+            <span class="font-bold text-lg">RESOL — Administración</span>
+            <a href="{{ route('admin.dashboard') }}"
+               class="text-sm opacity-80 hover:opacity-100 hover:underline">
+                Inicio
+            </a>
+            <a href="{{ route('admin.cotizacion') }}"
+               class="text-sm opacity-80 hover:opacity-100 hover:underline">
+                Cotizaciones
+            </a>
+        </div>
+        <div class="flex items-center gap-4">
+            <span class="text-sm opacity-80">{{ Auth::guard('admin')->user()->nombre }}</span>
             <button type="button" onclick="cerrarSesion()"
                     class="text-sm bg-blue-800 hover:bg-blue-900 px-3 py-1 rounded">
                 Salir
@@ -22,8 +32,7 @@
         </div>
     </nav>
 
-    <!-- Contenido -->
-    <main class="p-4">
+    <main>
         {{ $slot }}
     </main>
 
